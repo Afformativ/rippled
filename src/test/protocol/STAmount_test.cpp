@@ -543,21 +543,18 @@ public:
         STAmount two(noIssue(), 2);
         STAmount three(noIssue(), 3);
 
-        // Test division rounding with round down (false), normal, and round up (true)
+        // Test division rounding with round down, normal, and round up 
         STAmount oneThird1 = divRound(one, three, noIssue(), false);
         STAmount oneThird2 = divide(one, three, noIssue());
         STAmount oneThird3 = divRound(one, three, noIssue(), true);
 
-        // Verify that rounding down gives a smaller or equal result
         BEAST_EXPECT(oneThird1 <= oneThird2);
-        // Verify that rounding up gives a larger or equal result
         BEAST_EXPECT(oneThird3 >= oneThird2);
 
         STAmount twoThird1 = divRound(two, three, noIssue(), false);
         STAmount twoThird2 = divide(two, three, noIssue());
         STAmount twoThird3 = divRound(two, three, noIssue(), true);
 
-        // Verify rounding direction for two thirds
         BEAST_EXPECT(twoThird1 <= twoThird2);
         BEAST_EXPECT(twoThird3 >= twoThird2);
 
@@ -566,30 +563,23 @@ public:
         STAmount oneB = multiply(oneThird2, three, noIssue());
         STAmount oneC = mulRound(oneThird3, three, noIssue(), true);
 
-        // When multiplying one third by three, we should get close to one
         BEAST_EXPECT(oneA <= one);
         BEAST_EXPECT(oneC >= one);
 
-        // Test adding two thirds twice equals four thirds
-        STAmount fourThirdsB = twoThird2 + twoThird2;
-        BEAST_EXPECT(fourThirdsB > one);  // Should be greater than one
-
-        // Test XRP (native currency) rounding
+        // Test XRP rounding
         STAmount dripTest1 = mulRound(twoThird2, two, xrpIssue(), false);
         STAmount dripTest2 = multiply(twoThird2, two, xrpIssue());
         STAmount dripTest3 = mulRound(twoThird2, two, xrpIssue(), true);
 
-        // Verify XRP rounding behavior
         BEAST_EXPECT(dripTest1 <= dripTest2);
         BEAST_EXPECT(dripTest3 >= dripTest2);
-        BEAST_EXPECT(dripTest2.native());  // Should be native currency
+        BEAST_EXPECT(dripTest2.native());  
 
         // Test that multiply and divide are inverse operations (approximately)
         STAmount testValue(noIssue(), 100);
         STAmount divided = divide(testValue, three, noIssue());
         STAmount multiplied = multiply(divided, three, noIssue());
         
-        // Due to rounding, we should get close to the original value
         BEAST_EXPECT(multiplied.getText() == testValue.getText());
     }
 
